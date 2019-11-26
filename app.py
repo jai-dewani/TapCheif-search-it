@@ -77,7 +77,6 @@ def search():
             ans = []
             for result in results:
                 ar = text[result]
-                ar = ' '.join(ar)
                 sentence = ar
                 ans.append([result,sentence])
             return render_template('search.html',results = ans,word = word_to_search)
