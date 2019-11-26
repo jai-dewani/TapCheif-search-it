@@ -109,10 +109,9 @@ def clean():
     invertedIndex.clean()
     return redirect("/")
 
-invertedIndex = None
+invertedIndex, text = tokenize()
+
 if __name__=="__main__":
-    global text 
-    invertedIndex, text = tokenize()
     text = [i.split() for i in text]
     app.run(use_reloader=True, debug=True)
 
