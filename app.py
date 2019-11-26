@@ -10,13 +10,15 @@ def cleaning(document):
 def readfile(filename):
     f = open('text.txt','r')
     text = f.read()
+    return1 = text.split('\n\n')
     split_document = text.split('\n\n')
     for i in range(len(split_document)):
         clean_doc = cleaning(split_document[i])
         # clean_doc.split()
         split_document[i] = clean_doc.split()    
     # print(split_document[:5])
-    return split_document,text.split('\n\n')
+    # print("TEXT",return1[0])
+    return split_document,return1
 
 def writefile(filename,text):
     f = open(filename,'a+')
@@ -109,9 +111,9 @@ def clean():
     invertedIndex.clean()
     return redirect("/")
 
+
 invertedIndex, text = tokenize()
 
 if __name__=="__main__":
-    text = [i.split() for i in text]
+    # text = [i.split() for i in text]
     app.run(use_reloader=True, debug=True)
-
