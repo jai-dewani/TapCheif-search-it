@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import flask
 from collections import Counter
 app = Flask(__name__)
@@ -24,36 +24,32 @@ def writefile(filename,text):
     f.write(text+'\n\n')
     f.close()
 
-def readimdb():
-    f = open('IMDB Dataset.csv','r+')
-    i = 0
-    while(i<50000):
-        r = f.readline()
-        # print(i,r)
-        r = r.split(',')
-        r = r[:-1]
-        r = ','.join(r)
-        r = r.replace('<br />','')
-        # print(r)
-        writefile('text.txt',r)
-        # i+=1
-        # print(i)
-    f.close()
-
 
 class InvertedIndex:
     def __init__(self):
         self.dict = {}
+
     def insert(self,word,document,position):
         if self.dict.get(word)==None:
             self.dict[word.lower()] = [[document,position]]
         else:
             self.dict[word.lower()].append([document,position])
+
     def find(self,word):
-        positions = self.dict[word]
+        try:
+            positions = self.dict[word]
+        except:
+            return "No match found" 
         document = [i[0] for i in positions]
-        
-        return 
+        count_document = Counter(document)
+        sorted_documents = [[count_document[i],i] for i in count_document]
+        sorted_documents.sort(reverse=True)
+        final_documents = [i[1] for i in sorted_documents]
+        print(sorted_documents)
+        return final_documents[:10]
+
+    def clean(self):
+        self.dict = {}
 
 print("START")
 
@@ -65,42 +61,64 @@ def tokenize():
         for j in range(len(text[i])):
             invertedIndex.insert(text[i][j],i,j)
     return invertedIndex,orignal_text
-    # word = input("Enter a word ")
-    # ans = invertedIndex.find(word)
-    # for i in range(min(10,len(ans))):
-    #     a = ans[i]
-    #     print(text[a[0]][a[1]:a[1]+10])
-    # print(ans[:min(10,len(ans))])
+
+
 
 @app.route('/')
-def hello_word():
+def index():
     return flask.render_template('./index.html')
 
 @app.route('/search',methods=['POST','GET'])
 def search():
-    global text
+
+    global text, invertedIndex
     if request.method == 'POST':
         word_to_search = request.form['search']
         results = invertedIndex.find(word_to_search)
-        ans = []
-        for result in results:
-            start = result[1]-5
-            end = result[1]+5
-            print(text[0:10])
-            ar = text[result[0]]
-            ar.split(word_to_search)
-
-            sentence = ' '.join(ar)
-
-            ans.append([result[0],sentence])
-        return render_template('search.html',results = ans,word = word_to_search)
+        if type(results)==str:
+            return render_template('search.html',word = word_to_search)
+        else:
+            ans = []
+            for result in results:
+                ar = text[result]
+                ar = ' '.join(ar)
+                sentence = ar
+                ans.append([result,sentence])
+            return render_template('search.html',results = ans,word = word_to_search)
     else:
-        return flask.render_template('./index.html')
+        return redirect("/")
+
+@app.route('/insert',methods=['GET','POST'])
+def insert():
+    global text, invertedIndex
+    if request.method=='POST':
+        textarea = request.form['text']
+        texts = textarea.split('\n\n')
+        for document in texts:
+            writefile('text.txt',document)
+            # Cleaning the paragraph
+            document = cleaning(document)
+            text.append(document)
+            # Write the new lines file
+            words = document.split()
+            # Inserting new words to Index
+            document_no = len(text)
+            for j in range(len(words)):
+                invertedIndex.insert(document[j],document_no,j)
+        return render_template('index.html')   
+    else:
+        return render_template('insert.html')
+
+@app.route('/clean',methods=['GET'])
+def clean():
+    global invertedIndex
+    invertedIndex.clean()
+    return redirect("/")
 
 
 if __name__=="__main__":
     global invertedIndex, text 
     invertedIndex, text = tokenize()
-    print(text[0:2])
     text = [i.split() for i in text]
     app.run(use_reloader=True, debug=True)
+
