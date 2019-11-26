@@ -14,22 +14,22 @@
 		font-size: 20px;
 		/* height: 50px; */
 		background-color: #333;
-		color:white
+        color:white;
 	}
 	.header .left{
 		float: left;
-		padding-right: 20px;
-		color: inherit; 
+        padding-right: 20px;
 	}
-	.header a{
+    .header a{
 		color: inherit; 
+        text-decoration: none;
 	}
 	.header .right{
 		float: right;
 		padding-right: 50px;
 	}
 	.main{
-		margin-top:200px;
+		margin-top:150px;
 	}
 	#message{
 		text-align: center;
@@ -44,8 +44,8 @@
 	<div class="header">
 		<div class="left">
 			<a href="/">Home</a>
-		</div>
-		<div class="left">
+        </div>
+        <div class="left">
 			<a href="/insert">Insert</a>
 		</div>
 		<div class="left">
@@ -57,16 +57,14 @@
 	</div>
 	<div class="main">
 		<div id="message">
-			<h1>List of documents with the word "{{word}}" </h1>
-			{% if results %}
-				{% for result in results %}
-				<p id="textarea">
-					<b>Document  {{result.0}}:</b> {{result.1}}<br>
-				</p>
-				{% endfor %}
-			{% else %}
-				<i>No match found</i>
-			{% endif %}
+            <form action="/insert" method="POST">
+                Insert new paragrapg/document here <br>
+                Seprated by two newline<br><br><br>
+
+                <textarea name="text" id="text" cols="80" rows="20"></textarea>
+                <br>
+                <input type="submit">
+            </form>
 		</div>
 	</div>
 </body>

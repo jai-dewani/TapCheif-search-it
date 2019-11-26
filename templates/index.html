@@ -13,11 +13,17 @@
         width: 100%;
         font-size: 20px;
         /* height: 50px; */
-        background-color: aqua;
+        background-color: #333;
+        color:white
     }
     .header .left{
         float: left;
+        padding-right: 20px;
     }
+    .header a{
+		color: inherit; 
+        text-decoration: none;
+	}
     .header .right{
         float: right;
         padding-right: 50px;
@@ -33,8 +39,14 @@
 <body>  
     <div class="header">
         <div class="left">
-            Search 
+			<a href="/">Home</a>
         </div>
+        <div class="left">
+			<a href="/insert">Insert</a>
+		</div>
+		<div class="left">
+			<a href="/clean">Delete</a>
+		</div>
         <div class="right">
             <form action="/search" method="POST"><input type="text" name="search"></form>
         </div>
