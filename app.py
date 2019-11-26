@@ -3,7 +3,6 @@ import flask
 from collections import Counter
 app = Flask(__name__)
 
-
 def cleaning(document):
     document = document.replace(',','').replace('.','').replace('"','').replace('-','').replace('-','').replace(')','').replace('(','')
     return document
@@ -23,7 +22,6 @@ def writefile(filename,text):
     f = open(filename,'a+')
     f.write(text+'\n\n')
     f.close()
-
 
 class InvertedIndex:
     def __init__(self):
@@ -51,8 +49,6 @@ class InvertedIndex:
     def clean(self):
         self.dict = {}
 
-print("START")
-
 def tokenize():
     text, orignal_text = readfile('text.txt')
     # print(*text[:5])
@@ -61,8 +57,6 @@ def tokenize():
         for j in range(len(text[i])):
             invertedIndex.insert(text[i][j],i,j)
     return invertedIndex,orignal_text
-
-
 
 @app.route('/')
 def index():
@@ -115,9 +109,9 @@ def clean():
     invertedIndex.clean()
     return redirect("/")
 
-
+invertedIndex = None
 if __name__=="__main__":
-    global invertedIndex, text 
+    global text 
     invertedIndex, text = tokenize()
     text = [i.split() for i in text]
     app.run(use_reloader=True, debug=True)
