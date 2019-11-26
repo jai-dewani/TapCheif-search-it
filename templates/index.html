@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+   <title>My title</title>
+   <style>
+    *{
+        margin: 0;
+        padding: 0;        
+    }
+    .header{
+        position: fixed;
+        top:0;
+        padding: 20px;
+        width: 100%;
+        font-size: 20px;
+        /* height: 50px; */
+        background-color: aqua;
+    }
+    .header .left{
+        float: left;
+    }
+    .header .right{
+        float: right;
+        padding-right: 50px;
+    }
+    .main{
+        margin-top:200px;
+    }
+    #message{
+        text-align: center;
+    }
+   </style>
+</head>
+<body>  
+    <div class="header">
+        <div class="left">
+            Search 
+        </div>
+        <div class="right">
+            <form action="/search" method="POST"><input type="text" name="search"></form>
+        </div>
+    </div>
+    <div class="main">
+        <div id="message">
+            <h1>Welcome to Search</h1>
+            A fast searching tool made using inverted index<br>
+            Start searching by using the input from the top right <br>
+        </div>
+    </div>
+</body>

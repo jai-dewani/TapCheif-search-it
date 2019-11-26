@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+   <title>My title</title>
+   <style>
+	*{
+		margin: 0;
+		padding: 0;        
+	}
+	.header{
+		position: fixed;
+		top:0;
+		padding: 20px;
+		width: 100%;
+		font-size: 20px;
+		/* height: 50px; */
+		background-color: aqua;
+	}
+	.header .left{
+		float: left;
+	}
+	.header .right{
+		float: right;
+		padding-right: 50px;
+	}
+	.main{
+		margin-top:200px;
+	}
+	#message{
+		text-align: center;
+	}
+	#textarea{
+		text-align: left;
+		margin: 10%;
+	}
+   </style>
+</head>
+<body>  
+	<div class="header">
+		<div class="left">
+			Search 
+		</div>
+		<div class="right">
+			<form action="/search" method="POST"><input type="text" name="search"></form>
+		</div>
+	</div>
+	<div class="main">
+		<div id="message">
+			<h1>List of documents with the word "{{word}}" </h1>
+			{% for result in results %}
+			<p id="textarea">
+				<b>Document  {{result.0}}:</b> {{result.1}}<br>
+			</p>
+			{% endfor %}
+		</div>
+	</div>
+</body>
