@@ -3,10 +3,16 @@ import flask
 from collections import Counter
 app = Flask(__name__)
 
+'''
+Cleans the document of special characters like '",.-()
+'''
 def cleaning(document):
     document = document.replace(',','').replace('.','').replace('"','').replace('-','').replace('-','').replace(')','').replace('(','')
     return document
 
+'''
+Reads text.txt amd return the documents sperated and cleaned.
+'''
 def readfile(filename):
     f = open('text.txt','r')
     text = f.read()
@@ -14,17 +20,20 @@ def readfile(filename):
     split_document = text.split('\n\n')
     for i in range(len(split_document)):
         clean_doc = cleaning(split_document[i])
-        # clean_doc.split()
         split_document[i] = clean_doc.split()    
-    # print(split_document[:5])
-    # print("TEXT",return1[0])
     return split_document,return1
 
+'''
+Writes all the new documents back to text.txt
+'''
 def writefile(filename,text):
     f = open(filename,'a+')
     f.write(text+'\n\n')
     f.close()
 
+'''
+Main class, stores words with their document number and position. 
+'''
 class InvertedIndex:
     def __init__(self):
         self.dict = {}
@@ -51,6 +60,9 @@ class InvertedIndex:
     def clean(self):
         self.dict = {}
 
+'''
+Read text.txt and creates a initial inverted index object.
+'''
 def tokenize():
     text, orignal_text = readfile('text.txt')
     # print(*text[:5])
@@ -60,10 +72,16 @@ def tokenize():
             invertedIndex.insert(text[i][j],i,j)
     return invertedIndex,orignal_text
 
+'''
+Home route, return a home page
+'''
 @app.route('/')
 def index():
     return flask.render_template('./index.html')
 
+'''
+Search route, redirects to home page on a GET request and returns a list of document on a POST request with a search key
+'''
 @app.route('/search',methods=['POST','GET'])
 def search():
 
@@ -83,6 +101,9 @@ def search():
     else:
         return redirect("/")
 
+'''
+Insert route, redirects to homepage on a GET request and accepts a document or a list of documents seprated by two newlines in POST request and adds all of them to the index.
+'''
 @app.route('/insert',methods=['GET','POST'])
 def insert():
     global text, invertedIndex
@@ -104,15 +125,17 @@ def insert():
     else:
         return render_template('insert.html')
 
+'''
+Clean route, Deletes all the index form memory
+'''
 @app.route('/clean',methods=['GET'])
 def clean():
     global invertedIndex
     invertedIndex.clean()
     return redirect("/")
 
-
+# Genrates object of Inverted Index and text from text.txt
 invertedIndex, text = tokenize()
-
 if __name__=="__main__":
     # text = [i.split() for i in text]
     app.run(use_reloader=True, debug=True)
