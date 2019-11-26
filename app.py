@@ -63,12 +63,14 @@ def tokenize():
     return invertedIndex,orignal_text
 
 
+
 @app.route('/')
 def index():
     return flask.render_template('./index.html')
 
 @app.route('/search',methods=['POST','GET'])
 def search():
+
     global text, invertedIndex
     if request.method == 'POST':
         word_to_search = request.form['search']
@@ -113,9 +115,10 @@ def clean():
     invertedIndex.clean()
     return redirect("/")
 
+
 if __name__=="__main__":
     global invertedIndex, text 
     invertedIndex, text = tokenize()
-    # print(text[0:2])
     text = [i.split() for i in text]
     app.run(use_reloader=True, debug=True)
+
