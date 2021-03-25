@@ -68,7 +68,7 @@ pysrt==1.1.1
 python-dateutil==1.5
 pytz==2018.5
 pywinpty==0.5.5
-PyYAML==5.1.2
+PyYAML==5.4
 pyzmq==18.1.0
 Quandl==3.4.2
 requests==2.20.0
